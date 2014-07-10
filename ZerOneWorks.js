@@ -6,7 +6,15 @@
 //querystring = require("querystring");
 
 var express = require('express');
+var bodyParser = require('body-parser');
+//var wechat = require('./node_modules/wechat/lib/wechat.js');
+var format = require('./lib/format.js');
+//var xml2js = require('xml2js');
+//var BufferHelper = require('bufferhelper');
+
 var app = express();
+
+app.use(bodyParser());
 
 app.get('/abc',function (req, res) {
     var echostr = req.query.echostr;
@@ -14,19 +22,25 @@ app.get('/abc',function (req, res) {
     res.send(echostr);
 });
 
-app.listen(80);
+app.post('/abc',function(req, res) {
+    var name2 = req.body;
+    format.getMessage(req, function (err, result) {
 
-//http.createServer(function (req, res) {
-//    // 获取 URL 路径并在控制台上打印
-//    var pathname = url.parse(req.url).pathname;
-//    var queryname = url.parse(req.url).query;
-//    var queryname2 = req.query.
-//    var testname = querystring.parse(queryname)['echostr'];
-//    console.log('Request for ' + pathname + ' received.');
-//    console.log('Request for ' + testname + ' received.');
-//
-//    res.writeHead(200, {'Content-Type': 'text/plain'});
-//    res.end(testname);
-//}).listen(80, '10.0.0.115');
+        var message = format.formatMessage(result);
+        console.log(message);
+        //res.reply('ZerOneWorks');
+        //console.log(name2);
+        //res.send(name2);
+        toUserName = message.ToUserName;
+        fromUserName = message.FromUserName;
+        content = '收到来自openid： ' +  fromUserName + ' 的消息: ' + message.Content;
+        var new1 = format.reply(content, toUserName,fromUserName );
+        //var new2 = '<xml><ToUserName><![CDATA[ouylWt5mKO36JrqXlGQdERM3YCQo]]></ToUserName><FromUserName><![CDATA[gh_791879cee39f]]></FromUserName><CreateTime>1404993089648</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[this is a test]]></Content></xml>'
+        res.writeHead(200,"Content-Type:text/xml;charset=UTF-8");
+        res.end(new1);
+    });
+});
+
+app.listen(80);
 
 console.log('Server running at http://10.0.0.115/');
