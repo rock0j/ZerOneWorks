@@ -27,7 +27,7 @@ app.post('/abc',function(req, res) {
     format.getMessage(req, function (err, result) {
 
         var message = format.formatMessage(result);
-        console.log(message);
+        //console.log(message);
         //res.reply('ZerOneWorks');
         //console.log(name2);
         //res.send(name2);
