@@ -55,7 +55,7 @@ var contentSchema = new mongoose.Schema({
 var keyCmd = mongoose.model('keycmds', keyCmdSchema);
 var contents = mongoose.model('contents',contentSchema);
 
-exports.cmdSearch = function (message,callback) {
+var cmdSearch = function (message,callback) {
 
     //设置搜索条件
     var conditions = {"sKey": message.Content};
@@ -67,7 +67,7 @@ exports.cmdSearch = function (message,callback) {
 
 
     //查询mongoDB数据库获取结果
-    keyCmd.findOne(conditions, fields);
+    //keyCmd.findOne(conditions, fields);
     keyCmd.findOne(conditions, fields, function (error, result) {
         if (error) {
             console.log(error);
@@ -88,6 +88,10 @@ exports.cmdSearch = function (message,callback) {
                     MsgInfo = getContent(command.sContendID,function(result) {
                         return callback(result);
                     });
+                    //console.log("返回的数据");
+                    //console.log(MsgInfo);
+                    //console.log("上面是返回的数据的数值");
+                    //MsgInfo;
                 }
             }
         }
@@ -95,22 +99,51 @@ exports.cmdSearch = function (message,callback) {
     //return MsgInfo;
 };
 
+global.aaa ;
 var getContent = function (id,callback) {
+    //var promise = new mongoose.Promise();
 
-    contents.findById(id, "content", function(error, result){
-        if(error){
-            console.log(error);
-        }else{
+//    var promise = contents.findById(id, "content").exec();
+    //return promise.result.content;
+//    promise.then (
+//        function (result){
+//            console.log("111111111111111");
+//            console.log(result);
+//            global.aaa =  promise.result;
+//            return global.aaa;
+//        }
+//    );
+    //contents.findById(id, "content", function(error, result){
+    //    promise.resolve(result);
 
-            //console.log(result.content);
-            return callback(result.content);
-        }
+//        this.txt = "";
+//        if(error){
+//            console.log(error);
+//        }else{
+//
+//            //console.log(result.content);
+//            this.txt = result.content;
+//            return this;
+//        }
+//    });
+    var query = contents.findById(id, "content");
+    query.exec(function(error,result) {
+        global.aaa = result.content;
+        return callback(result.content);
+        //console.log("22222222222");
+        //console.log(global.aaa);
     });
-    console.log("看看这里有没有执行")
+    console.log("看看这里有没有执行");
+    //return global.aaa;
 };
 
-//var testmessage = {"Content" : "11"};
+var testmessage = {"Content" : "11"};
 
-//var info = getContent(testmessage);
+var info = cmdSearch(testmessage,function(result) {
+    //return result.content;
+    console.log("大返回数据");
+    console.log(result);
+    //console.log(info);
+});
 
-//console.log(info);
+console.log(info);
