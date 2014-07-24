@@ -1,6 +1,6 @@
-var DB = require('./models/KeyCmd.js');
+var KeyCmd = require('./models/KeyCmd.js');
 
-DB.findOne({},function(error,result){
+KeyCmd.findOne({},function(error,result){
     if(error) {
         console.log(error);
     }else {
