@@ -2,7 +2,7 @@ var mongodb = require('./mongodb.js');
 
 var Schema = mongodb.mongoose.Schema;
 
-var keyCmdSchema = new Schema({
+var KeyCmdSchema = new Schema({
     nSMSID			:Number,
     nPlatfromID		:Number,
     sServiceID		:String,
@@ -22,6 +22,6 @@ var keyCmdSchema = new Schema({
     sNotes			:String
 });
 
-var keyCmd = mongodb.mongoose.model('KeyCmds', keyCmdSchema);
+var KeyCmd = mongodb.mongoose.model('KeyCmds', KeyCmdSchema);
 
-module.exports = keyCmd;
+module.exports = KeyCmd;
