@@ -25,11 +25,13 @@ app.get('/abc',function (req, res) {
 });
 
 app.post('/abc',function(req, res) {
+    //console.log("****************接受消息***************");
+    //console.log(new Date().getTime());
     var name2 = req.body;
     format.getMessage(req, function (err, result) {
 
         var message = format.formatMessage(result);
-        //console.log(message);
+        console.log(message);
         //res.reply('ZerOneWorks');
         //console.log(name2);
         //res.send(name2);
@@ -37,7 +39,9 @@ app.post('/abc',function(req, res) {
         var fromUserName = message.FromUserName;
         //message.testadd = 'hello add';
         //content = '收到来自openid： ' +  fromUserName + ' 的消息: ' + message.Content;
-        var content  ;
+        //var content  ;
+
+        //不读取数据库的情况
 //        var content =
 //        [
 //            {
@@ -47,18 +51,29 @@ app.post('/abc',function(req, res) {
 //                url: "http://zeroneworks.vicp.net:8080/xitie.html"
 //            }
 //        ];
-        console.log(message);
+//          //console.log(message);
+//        var new1 = format.reply(content, toUserName,fromUserName );
+//        res.writeHead(200,"Content-Type:text/xml;charset=UTF-8");
+//        res.end(new1);
 
-        if (message.MsgType == 'text') {
-            console.log("开始打印输出的content");
+        //读取mongoDB数据内容
+        if (message.MsgType == 'text' || message.MsgType == 'event' ) {
+            //console.log("开始打印输出的content");
             content = gobalSearch.cmdSearch(message,function(result) {
+                //console.log("****************接收返回数据***************");
+                //console.log(new Date().getTime());
+
                 var new1 = format.reply(result, toUserName,fromUserName );
+                //console.log("****************格式化XML***************");
+                //console.log(new Date().getTime());
                 //var new2 = '<xml><ToUserName><![CDATA[ouylWt5mKO36JrqXlGQdERM3YCQo]]></ToUserName><FromUserName><![CDATA[gh_791879cee39f]]></FromUserName><CreateTime>1404993089648</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[this is a test]]></Content></xml>'
                 res.writeHead(200,"Content-Type:text/xml;charset=UTF-8");
                 res.end(new1);
+                //console.log("****************处理完成***************");
+                //console.log(new Date().getTime());
             });
-            console.log("打印输出的content");
-            console.log(content);
+            //console.log("打印输出的content");
+            //console.log(content);
         }
 
     });
