@@ -59,7 +59,7 @@ app.post('/abc',function(req, res) {
         //读取mongoDB数据内容
         if (message.MsgType == 'text' || message.MsgType == 'event' ) {
             //console.log("开始打印输出的content");
-            content = gobalSearch.cmdSearch(message,function(result) {
+            content = gobalSearch(message,function(result) {
                 //console.log("****************接收返回数据***************");
                 //console.log(new Date().getTime());
 
